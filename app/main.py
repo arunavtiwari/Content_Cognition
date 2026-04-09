@@ -68,6 +68,9 @@ def generate_ideas_endpoint(payload: GenerateIdeasRequest) -> GenerateIdeasRespo
         selected_skills=selected_skills,
         meta_features=normalized_features,
         idea_count=payload.idea_count,
+        use_open_source_llm=payload.use_open_source_llm,
+        llm_model=payload.llm_model,
+        llm_temperature=payload.llm_temperature,
     )
 
     return GenerateIdeasResponse(

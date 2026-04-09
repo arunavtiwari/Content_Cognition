@@ -31,6 +31,8 @@
       <label>Platform</label><input id="platform" value="instagram" />
       <label>Brand voice</label><input id="voice" value="Evidence-based motivational" />
       <label>Idea count</label><input id="ideaCount" type="number" value="5" min="1" max="25" />
+      <label><input id="useOssLlm" type="checkbox" /> Use open-source LLM (Ollama)</label>
+      <label>Open-source model</label><input id="llmModel" value="llama3.1" />
       <button onclick="generateIdeas()">Generate</button>
       <div id="results"></div>
     </div>
@@ -54,6 +56,9 @@
         platform: document.getElementById('platform').value,
         brand_voice: document.getElementById('voice').value,
         idea_count: Number(document.getElementById('ideaCount').value),
+        use_open_source_llm: document.getElementById('useOssLlm').checked,
+        llm_model: document.getElementById('llmModel').value,
+        llm_temperature: 0.4,
         constraints: [],
         meta_tribe_features: {
           attention_spike: 0.8,

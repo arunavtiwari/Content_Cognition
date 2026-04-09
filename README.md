@@ -44,6 +44,25 @@ When you call `POST /generate-ideas`, idea creation follows this pipeline:
 
 This gives you ideas aligned to the result you want (reach, leads, authority, etc.) instead of generic brainstorming.
 
+
+## Open-source LLM idea generation (Ollama)
+
+The generator can use a local open-source model (instead of template-only generation) when `use_open_source_llm=true`.
+
+1. Start Ollama locally (default URL expected by app: `http://127.0.0.1:11434`).
+2. Pull a model, for example:
+
+```bash
+ollama pull llama3.1
+```
+
+3. Call `/generate-ideas` with:
+- `"use_open_source_llm": true`
+- `"llm_model": "llama3.1"`
+- optional: set `OPEN_SOURCE_LLM_URL` env var if your Ollama host is different.
+
+If the model endpoint is unavailable, the app automatically falls back to built-in template generation.
+
 ## Project structure
 
 ```txt
@@ -115,7 +134,9 @@ curl -X POST http://localhost:8000/generate-ideas \
       "emotion_intensity": 0.7,
       "novelty_signal": 0.6
     },
-    "idea_count": 5
+    "idea_count": 5,
+    "use_open_source_llm": true,
+    "llm_model": "llama3.1"
   }'
 ```
 

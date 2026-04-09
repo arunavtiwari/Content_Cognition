@@ -16,6 +16,9 @@ class GenerateIdeasRequest(BaseModel):
     meta_tribe_features: Dict[str, float] = Field(default_factory=dict)
     campaign_history: Optional[Dict[str, float]] = None
     idea_count: int = Field(default=10, ge=1, le=25)
+    use_open_source_llm: bool = False
+    llm_model: str = "llama3.1"
+    llm_temperature: float = Field(default=0.4, ge=0.0, le=1.5)
 
 
 class IdeaVariant(BaseModel):
