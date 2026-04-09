@@ -24,6 +24,26 @@ Content Cognition is an AI application that generates and optimizes content idea
 - Browser UI at `/` for generating ideas and optimizing scripts.
 - Automated API tests with `pytest`.
 
+
+## How the system comes up with content ideas
+
+When you call `POST /generate-ideas`, idea creation follows this pipeline:
+
+1. **Parse your brief**: niche, audience, desired outcome, content type, platform, and brand voice.
+2. **Normalize brain/cognitive features**: Meta Tribe inputs are clamped to safe ranges using defaults when missing.
+3. **Map outcome to scoring weights**: e.g., lead-gen increases conversion weight; virality goals increase virality/retention weights.
+4. **Route writing/marketing skills**: select relevant skills (hook writing, CTA optimization, thought leadership, SEO, etc.) based on goal + format + platform.
+5. **Generate candidate angles**: build idea titles/hooks/scripts from a structured angle library (myth-busting, quick wins, before/after, challenge format, etc.).
+6. **Score each idea** using:
+   - `ViralityScore`
+   - `ConversionScore`
+   - `RetentionScore`
+   - `BrandFitScore`
+   - `NoveltyScore`
+7. **Rank and return top ideas** by weighted total score, including rationale and A/B hook + CTA variants.
+
+This gives you ideas aligned to the result you want (reach, leads, authority, etc.) instead of generic brainstorming.
+
 ## Project structure
 
 ```txt
