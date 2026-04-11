@@ -3,143 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Content Cognition</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>Content Cognition UI</title>
   <style>
-    :root { --bg:#070b1d; --card:rgba(16,22,45,.72); --text:#e7edff; --muted:#9db0da; --line:rgba(139,165,240,.25); }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family:Inter,sans-serif; color:var(--text); background:radial-gradient(circle at top right,#1f2a5f 0%,var(--bg) 55%); overflow-x:hidden; }
-    .wrap { max-width:1180px; margin:0 auto; padding:18px; }
-    .hidden { display:none; }
-    .glass { background:var(--card); border:1px solid var(--line); border-radius:18px; backdrop-filter:blur(10px); box-shadow:0 15px 45px rgba(0,0,0,.35); }
-    .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
-    .brand { font-weight:800; letter-spacing:.3px; }
-    .btn { cursor:pointer; border:1px solid var(--line); color:var(--text); background:linear-gradient(135deg,rgba(103,232,249,.18),rgba(167,139,250,.2)); padding:10px 14px; border-radius:12px; font-weight:600; }
-    .hero { display:grid; grid-template-columns:1.15fr 1fr; gap:20px; padding:24px; }
-    h1 { margin:0; line-height:1.05; font-size:clamp(2rem,5vw,3.7rem); }
-    .grad { background:linear-gradient(90deg,#67e8f9,#a78bfa,#22d3ee); -webkit-background-clip:text; background-clip:text; color:transparent; }
-    p { color:var(--muted); line-height:1.6; }
-    .grid3 { margin-top:18px; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-    .tile { padding:14px; border:1px solid var(--line); border-radius:14px; background:rgba(10,14,30,.72); }
-    .tile b { display:block; font-size:1.1rem; margin-bottom:4px; }
-    #hero3d { width:100%; height:360px; border-radius:14px; background:rgba(8,12,28,.72); border:1px solid var(--line); }
-    .studio { margin-top:22px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    .panel { padding:16px; }
-    label { display:block; margin:8px 0 6px; color:var(--muted); font-size:.9rem; }
-    input, textarea { width:100%; background:rgba(9,13,27,.8); color:var(--text); border:1px solid var(--line); border-radius:10px; padding:10px; }
-    .row { display:flex; gap:10px; }
-    #results .idea { margin-top:10px; border:1px solid var(--line); padding:10px; border-radius:10px; background:rgba(8,12,25,.8); }
-    pre { white-space:pre-wrap; background:rgba(8,12,25,.85); border:1px solid var(--line); border-radius:10px; padding:10px; }
-    @media (max-width:960px){ .hero,.studio{grid-template-columns:1fr;} .grid3{grid-template-columns:1fr;} }
+    body { font-family: Arial, sans-serif; margin: 0; background: #0f172a; color: #e2e8f0; }
+    .wrap { max-width: 1050px; margin: 20px auto; padding: 20px; }
+    h1 { margin-bottom: 8px; }
+    .card { background: #111827; border: 1px solid #334155; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 10px 0 5px; font-weight: 600; }
+    input, textarea, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #0b1220; color: #e2e8f0; }
+    button { margin-top: 12px; padding: 10px 14px; border: 0; border-radius: 6px; background: #2563eb; color: white; cursor: pointer; }
+    .idea { border-top: 1px solid #334155; padding-top: 10px; margin-top: 10px; }
+    .meta { color: #93c5fd; font-size: 0.9em; }
+    pre { white-space: pre-wrap; background: #0b1220; padding: 10px; border-radius: 8px; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="brand">⚡ Content Cognition</div>
-      <button class="btn" id="goStudioTop" onclick="showStudio()">Open Studio</button>
+    <h1>Content Cognition</h1>
+    <p>Create reels, blogs, and scripts powered by outcome goals + Meta Tribe style cognitive signals.</p>
+
+    <div class="card">
+      <h2>Generate Ideas</h2>
+      <label>Niche</label><input id="niche" value="Fitness coaching" />
+      <label>Audience</label><input id="audience" value="Busy professionals 25-40" />
+      <label>Desired outcome</label><input id="outcome" value="Book consultation calls" />
+      <label>Content type</label><input id="contentType" value="reels" />
+      <label>Platform</label><input id="platform" value="instagram" />
+      <label>Brand voice</label><input id="voice" value="Evidence-based motivational" />
+      <label>Idea count</label><input id="ideaCount" type="number" value="5" min="1" max="25" />
+      <label><input id="useOssLlm" type="checkbox" /> Use open-source LLM (Ollama)</label>
+      <label>Open-source model</label><input id="llmModel" value="llama3.1" />
+      <button onclick="generateIdeas()">Generate</button>
+      <div id="results"></div>
     </div>
 
-    <section id="homePage" class="glass hero">
-      <div>
-        <h1>The <span class="grad">Home Page</span> for your AI content lab.</h1>
-        <p>
-          Build reels, blogs, and script ideas with brain-signal-aware scoring, OSS LLM generation,
-          and optimization pipelines designed for growth outcomes.
-        </p>
-        <div class="grid3">
-          <div class="tile"><b>3D + Motion UX</b>Parallax-inspired visual interface and interactive homepage.</div>
-          <div class="tile"><b>Outcome Ranker</b>Virality, conversion, retention, novelty, brand-fit scoring.</div>
-          <div class="tile"><b>Tribe V2 Ready</b>Designed for cognitive feature ingestion + fine-tuning plans.</div>
-        </div>
-        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn" onclick="showStudio()">Enter Creative Studio</button>
-          <button class="btn" onclick="demoFill()">Load Demo Inputs</button>
-        </div>
-      </div>
-      <canvas id="hero3d"></canvas>
-    </section>
-
-    <section id="studioPage" class="hidden">
-      <div class="top" style="margin-top:10px;">
-        <div class="brand">🎬 Creative Studio</div>
-        <button class="btn" onclick="showHome()">Back to Home</button>
-      </div>
-
-      <div class="studio">
-        <div class="panel glass">
-          <h2>Idea Generator</h2>
-          <label>Niche</label><input id="niche" value="Fitness coaching" />
-          <label>Audience</label><input id="audience" value="Busy professionals 25-40" />
-          <label>Desired outcome</label><input id="outcome" value="Book consultation calls" />
-          <div class="row">
-            <div style="flex:1"><label>Content type</label><input id="contentType" value="reels" /></div>
-            <div style="flex:1"><label>Platform</label><input id="platform" value="instagram" /></div>
-          </div>
-          <label>Brand voice</label><input id="voice" value="Evidence-based motivational" />
-          <div class="row">
-            <div style="flex:1"><label>Idea count</label><input id="ideaCount" type="number" min="1" max="25" value="5" /></div>
-            <div style="flex:1"><label>LLM model</label><input id="llmModel" value="llama3.1" /></div>
-          </div>
-          <label><input id="useOssLlm" type="checkbox" /> Use open-source LLM (Ollama)</label>
-          <button class="btn" onclick="generateIdeas()">Generate Ideas</button>
-        </div>
-
-        <div class="panel glass">
-          <h2>Results + Optimizer</h2>
-          <div id="results"></div>
-          <label>Script input</label>
-          <textarea id="scriptInput" rows="5">Hook: If you sit 8+ hours, your metabolism drops faster than you think.</textarea>
-          <button class="btn" onclick="optimizeScript()">Optimize Script</button>
-          <pre id="optimizedOutput"></pre>
-        </div>
-      </div>
-    </section>
+    <div class="card">
+      <h2>Optimize Script</h2>
+      <label>Script</label>
+      <textarea id="scriptInput" rows="6">Hook: If you sit 8+ hours, your metabolism drops faster than you think.</textarea>
+      <button onclick="optimizeScript()">Optimize Script</button>
+      <pre id="optimizedOutput"></pre>
+    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js"></script>
   <script>
-    function showStudio(){
-      document.getElementById('homePage').classList.add('hidden');
-      document.getElementById('studioPage').classList.remove('hidden');
-      window.scrollTo({top:0,behavior:'smooth'});
-    }
-
-    function showHome(){
-      document.getElementById('studioPage').classList.add('hidden');
-      document.getElementById('homePage').classList.remove('hidden');
-      window.scrollTo({top:0,behavior:'smooth'});
-    }
-
-    function demoFill() {
-      document.getElementById('niche').value = 'AI productivity tools';
-      document.getElementById('audience').value = 'Founders and creators';
-      document.getElementById('outcome').value = 'Generate inbound DMs and trial signups';
-      document.getElementById('contentType').value = 'reels';
-      document.getElementById('platform').value = 'instagram';
-      document.getElementById('voice').value = 'Bold, practical, data-driven';
-      document.getElementById('ideaCount').value = 6;
-    }
-
-    // 3D hero
-    const canvas = document.getElementById('hero3d');
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / 360, 0.1, 1000);
-    camera.position.z = 3.2;
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setSize(canvas.clientWidth, 360, false);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-    const p = new THREE.PointLight(0x67e8f9, 1.6); p.position.set(4,5,4); scene.add(p);
-    const knot = new THREE.Mesh(
-      new THREE.TorusKnotGeometry(0.75, 0.24, 130, 24),
-      new THREE.MeshPhysicalMaterial({ color: 0x8b5cf6, metalness: .25, roughness: .17, clearcoat: 1 })
-    );
-    scene.add(knot);
-    (function anim(){ requestAnimationFrame(anim); knot.rotation.x += .003; knot.rotation.y += .006; renderer.render(scene,camera); })();
-
     async function generateIdeas() {
       const payload = {
         niche: document.getElementById('niche').value,
@@ -153,20 +60,32 @@
         llm_model: document.getElementById('llmModel').value,
         llm_temperature: 0.4,
         constraints: [],
-        meta_tribe_features: { attention_spike: 0.8, emotion_intensity: 0.7, novelty_signal: 0.6 }
+        meta_tribe_features: {
+          attention_spike: 0.8,
+          emotion_intensity: 0.7,
+          novelty_signal: 0.6
+        }
       };
 
       const res = await fetch('/generate-ideas', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
 
       const container = document.getElementById('results');
-      container.innerHTML = `<p style="color:#9db0da">Skills: ${data.selected_skills.join(', ')}</p>`;
+      container.innerHTML = `<p class="meta">Skills: ${data.selected_skills.join(', ')}</p>`;
       data.ideas.forEach((idea) => {
         const div = document.createElement('div');
         div.className = 'idea';
-        div.innerHTML = `<h3>${idea.title}</h3><p><b>Hook:</b> ${idea.hook}</p><p><b>CTA:</b> ${idea.cta}</p><p style="color:#9db0da">Total ${idea.total_score} | Viral ${idea.virality_score} | Conv ${idea.conversion_score}</p><pre>${idea.script}</pre>`;
+        div.innerHTML = `
+          <h3>${idea.title}</h3>
+          <p><strong>Hook:</strong> ${idea.hook}</p>
+          <p><strong>CTA:</strong> ${idea.cta}</p>
+          <p class="meta">Total Score: ${idea.total_score} | Virality: ${idea.virality_score} | Conversion: ${idea.conversion_score}</p>
+          <pre>${idea.script}</pre>
+        `;
         container.appendChild(div);
       });
     }
@@ -179,8 +98,11 @@
         platform: document.getElementById('platform').value,
         mirofish_enabled: true
       };
+
       const res = await fetch('/optimize-script', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
       document.getElementById('optimizedOutput').textContent = `${data.optimized_script}\n\nReport: ${JSON.stringify(data.report, null, 2)}`;
