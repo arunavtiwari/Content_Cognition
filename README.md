@@ -22,6 +22,7 @@ Content Cognition is an AI application that generates and optimizes content idea
   - `BrandFitScore`
   - `NoveltyScore`
 - Interactive UI now has a dedicated Home page at `/` and a separate Studio page at `/studio` for generation/optimization workflows.
+- Browser UI at `/` for generating ideas and optimizing scripts.
 - Automated API tests with `pytest`.
 
 
@@ -103,8 +104,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 Open:
-- Home: `http://localhost:8000/`
-- Studio: `http://localhost:8000/studio`
+- UI: `http://localhost:8000/`
 - API docs: `http://localhost:8000/docs`
 
 ### 3) Run tests
@@ -166,21 +166,3 @@ curl -X POST http://localhost:8000/optimize-script \
 
 - If `pip install -r requirements.txt` fails with proxy/network errors, configure your Python package index/proxy first, then retry.
 - If `uvicorn` is not found, run `python3 -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000` inside the activated venv.
-
-
-## Tribe V2 training expansion plan
-
-To strengthen the ranking model using Tribe V2 + open naturalistic fMRI datasets:
-
-- Strategy doc: `training/TRIBE_V2_TRAINING_PLAN.md`
-- Dataset registry: `training/open_fmri_registry.json`
-- Config builder: `training/build_training_config.py`
-
-Generate a baseline training config:
-
-```bash
-python3 training/build_training_config.py
-```
-
-This writes `training/training_config.generated.json`.
-

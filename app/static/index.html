@@ -22,6 +22,18 @@
     .tile b{display:block;font-size:1.1rem;margin-bottom:4px}
     #hero3d{width:100%;height:360px;border-radius:14px;background:rgba(8,12,28,.72);border:1px solid rgba(139,165,240,.25)}
     @media (max-width:960px){.hero{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}}
+  <title>Content Cognition UI</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #0f172a; color: #e2e8f0; }
+    .wrap { max-width: 1050px; margin: 20px auto; padding: 20px; }
+    h1 { margin-bottom: 8px; }
+    .card { background: #111827; border: 1px solid #334155; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 10px 0 5px; font-weight: 600; }
+    input, textarea, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #0b1220; color: #e2e8f0; }
+    button { margin-top: 12px; padding: 10px 14px; border: 0; border-radius: 6px; background: #2563eb; color: white; cursor: pointer; }
+    .idea { border-top: 1px solid #334155; padding-top: 10px; margin-top: 10px; }
+    .meta { color: #93c5fd; font-size: 0.9em; }
+    pre { white-space: pre-wrap; background: #0b1220; padding: 10px; border-radius: 8px; }
   </style>
 </head>
 <body>
@@ -66,6 +78,94 @@
     const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.75, 0.24, 130, 24), new THREE.MeshPhysicalMaterial({ color: 0x8b5cf6, metalness: .25, roughness: .17, clearcoat: 1 }));
     scene.add(knot);
     (function anim(){ requestAnimationFrame(anim); knot.rotation.x += .003; knot.rotation.y += .006; renderer.render(scene,camera); })();
+    <h1>Content Cognition</h1>
+    <p>Create reels, blogs, and scripts powered by outcome goals + Meta Tribe style cognitive signals.</p>
+
+    <div class="card">
+      <h2>Generate Ideas</h2>
+      <label>Niche</label><input id="niche" value="Fitness coaching" />
+      <label>Audience</label><input id="audience" value="Busy professionals 25-40" />
+      <label>Desired outcome</label><input id="outcome" value="Book consultation calls" />
+      <label>Content type</label><input id="contentType" value="reels" />
+      <label>Platform</label><input id="platform" value="instagram" />
+      <label>Brand voice</label><input id="voice" value="Evidence-based motivational" />
+      <label>Idea count</label><input id="ideaCount" type="number" value="5" min="1" max="25" />
+      <label><input id="useOssLlm" type="checkbox" /> Use open-source LLM (Ollama)</label>
+      <label>Open-source model</label><input id="llmModel" value="llama3.1" />
+      <button onclick="generateIdeas()">Generate</button>
+      <div id="results"></div>
+    </div>
+
+    <div class="card">
+      <h2>Optimize Script</h2>
+      <label>Script</label>
+      <textarea id="scriptInput" rows="6">Hook: If you sit 8+ hours, your metabolism drops faster than you think.</textarea>
+      <button onclick="optimizeScript()">Optimize Script</button>
+      <pre id="optimizedOutput"></pre>
+    </div>
+  </div>
+
+  <script>
+    async function generateIdeas() {
+      const payload = {
+        niche: document.getElementById('niche').value,
+        audience: document.getElementById('audience').value,
+        desired_outcome: document.getElementById('outcome').value,
+        content_type: document.getElementById('contentType').value,
+        platform: document.getElementById('platform').value,
+        brand_voice: document.getElementById('voice').value,
+        idea_count: Number(document.getElementById('ideaCount').value),
+        use_open_source_llm: document.getElementById('useOssLlm').checked,
+        llm_model: document.getElementById('llmModel').value,
+        llm_temperature: 0.4,
+        constraints: [],
+        meta_tribe_features: {
+          attention_spike: 0.8,
+          emotion_intensity: 0.7,
+          novelty_signal: 0.6
+        }
+      };
+
+      const res = await fetch('/generate-ideas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      const container = document.getElementById('results');
+      container.innerHTML = `<p class="meta">Skills: ${data.selected_skills.join(', ')}</p>`;
+      data.ideas.forEach((idea) => {
+        const div = document.createElement('div');
+        div.className = 'idea';
+        div.innerHTML = `
+          <h3>${idea.title}</h3>
+          <p><strong>Hook:</strong> ${idea.hook}</p>
+          <p><strong>CTA:</strong> ${idea.cta}</p>
+          <p class="meta">Total Score: ${idea.total_score} | Virality: ${idea.virality_score} | Conversion: ${idea.conversion_score}</p>
+          <pre>${idea.script}</pre>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function optimizeScript() {
+      const payload = {
+        script: document.getElementById('scriptInput').value,
+        desired_outcome: document.getElementById('outcome').value,
+        brand_voice: document.getElementById('voice').value,
+        platform: document.getElementById('platform').value,
+        mirofish_enabled: true
+      };
+
+      const res = await fetch('/optimize-script', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      document.getElementById('optimizedOutput').textContent = `${data.optimized_script}\n\nReport: ${JSON.stringify(data.report, null, 2)}`;
+    }
   </script>
 </body>
 </html>
