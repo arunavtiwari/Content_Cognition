@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Cognition — 2027 Interactive Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050816;
+      --surface: rgba(20, 24, 40, 0.65);
+      --surface-strong: rgba(23, 28, 46, 0.9);
+      --text: #e6ecff;
+      --muted: #9eb0d8;
+      --accent: #67e8f9;
+      --accent-2: #a78bfa;
+      --accent-3: #22d3ee;
+      --stroke: rgba(123, 144, 196, 0.25);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; color: var(--text); background: radial-gradient(circle at 80% 5%, #1b2e57 0%, var(--bg) 45%); overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    .noise {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      opacity: 0.07;
+      background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+      background-size: 4px 4px;
+      z-index: 0;
+    }
+
+    .gradient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(45px);
+      opacity: 0.32;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .orb-1 { width: 380px; height: 380px; background: #6366f1; top: -120px; left: -100px; }
+    .orb-2 { width: 420px; height: 420px; background: #06b6d4; right: -110px; top: 20%; }
+    .orb-3 { width: 340px; height: 340px; background: #8b5cf6; left: 20%; bottom: -130px; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--stroke);
+      background: rgba(8, 11, 26, 0.6);
+    }
+
+    .topbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand { font-weight: 800; letter-spacing: .3px; display: flex; align-items: center; gap: 10px; }
+    .badge {
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(103, 232, 249, 0.08);
+    }
+
+    main { position: relative; z-index: 1; }
+
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 64px 20px 24px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      margin: 0;
+      line-height: 1.03;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: -1px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #67e8f9, #a78bfa, #22d3ee);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p { color: var(--muted); font-size: 1.05rem; line-height: 1.6; max-width: 620px; }
+
+    .cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+
+    button, .btn {
+      border: 1px solid var(--stroke);
+      background: linear-gradient(135deg, rgba(103,232,249,.16), rgba(167,139,250,.2));
+      color: var(--text);
+      border-radius: 12px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    button:hover, .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(2,8,23,.35); }
+
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--stroke);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 50px rgba(2, 8, 23, .35);
+    }
+
+    .three-wrap { min-height: 360px; position: relative; overflow: hidden; }
+    #hero3d { width: 100%; height: 360px; display: block; }
+
+    .kpi-grid {
+      max-width: 1200px;
+      margin: 10px auto 0;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .kpi {
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: rgba(10, 16, 31, 0.7);
+    }
+    .kpi .v { font-size: 1.2rem; font-weight: 800; }
+    .kpi .l { color: var(--muted); font-size: .84rem; }
+
+    .studio {
+      max-width: 1200px;
+      margin: 26px auto 90px;
+      padding: 0 20px;
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .panel { padding: 18px; }
+    .panel h2 { margin-top: 0; font-size: 1.15rem; }
+
+    label { display: block; margin: 10px 0 6px; font-size: .88rem; color: var(--muted); }
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      padding: 11px;
+      background: var(--surface-strong);
+      color: var(--text);
+      outline: none;
+    }
+    input:focus, textarea:focus { border-color: rgba(103, 232, 249, .5); box-shadow: 0 0 0 2px rgba(103,232,249,.15); }
+
+    .flex { display: flex; gap: 12px; }
+    .mini { font-size: .84rem; color: var(--muted); }
+
+    #results { margin-top: 12px; max-height: 540px; overflow: auto; padding-right: 6px; }
+    .idea {
+      border: 1px solid var(--stroke);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: rgba(11, 17, 34, 0.85);
+      transform: translateY(8px);
+      opacity: 0;
+      animation: rise .45s ease forwards;
+    }
+    .idea h3 { margin: 0 0 8px; font-size: 1rem; }
+    .meta { color: #98c6ff; font-size: .83rem; }
+    pre {
+      white-space: pre-wrap;
+      background: rgba(6, 10, 24, .75);
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      padding: 10px;
+      color: #d9e7ff;
+      margin-bottom: 0;
+      font-size: .88rem;
+    }
+
+    @keyframes rise {
+      from { transform: translateY(8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .studio { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="gradient-orb orb-1 parallax" data-speed="0.12"></div>
+  <div class="gradient-orb orb-2 parallax" data-speed="0.08"></div>
+  <div class="gradient-orb orb-3 parallax" data-speed="0.16"></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">⚡ Content Cognition</div>
+      <div class="badge">2027 Motion-First UI • AI Creative Lab</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h1>Design <span class="gradient-text">viral content systems</span>, not just random posts.</h1>
+        <p>
+          A cinematic AI studio that blends cognitive signal inputs, open-source LLM ideation,
+          and optimization loops to produce reels, blogs, and scripts tuned for outcomes.
+        </p>
+        <div class="cta-row">
+          <a href="#studio" class="btn">Open Creative Studio</a>
+          <button type="button" onclick="demoFill()">Load Viral Demo</button>
+        </div>
+      </div>
+      <div class="glass three-wrap">
+        <canvas id="hero3d"></canvas>
+      </div>
+    </section>
+
+    <section class="kpi-grid">
+      <div class="kpi"><div class="v">10x</div><div class="l">Faster idea cycles</div></div>
+      <div class="kpi"><div class="v">5D</div><div class="l">Scoring system</div></div>
+      <div class="kpi"><div class="v">OSS</div><div class="l">Local model support</div></div>
+      <div class="kpi"><div class="v">A/B</div><div class="l">Hook & CTA variants</div></div>
+    </section>
+
+    <section class="studio" id="studio">
+      <div class="panel glass">
+        <h2>🎬 Idea Generator</h2>
+        <label>Niche</label><input id="niche" value="Fitness coaching" />
+        <label>Audience</label><input id="audience" value="Busy professionals 25-40" />
+        <label>Desired outcome</label><input id="outcome" value="Book consultation calls" />
+        <div class="flex">
+          <div style="flex:1"><label>Content type</label><input id="contentType" value="reels" /></div>
+          <div style="flex:1"><label>Platform</label><input id="platform" value="instagram" /></div>
+        </div>
+        <label>Brand voice</label><input id="voice" value="Evidence-based motivational" />
+        <div class="flex">
+          <div style="flex:1"><label>Idea count</label><input id="ideaCount" type="number" value="5" min="1" max="25" /></div>
+          <div style="flex:1"><label>Open-source model</label><input id="llmModel" value="llama3.1" /></div>
+        </div>
+        <label><input id="useOssLlm" type="checkbox" /> Use open-source LLM (Ollama)</label>
+        <button onclick="generateIdeas()">Generate Ideas</button>
+        <p class="mini">Tip: enable OSS model for richer hooks and script narratives.</p>
+      </div>
+
+      <div class="panel glass">
+        <h2>🧪 Results + Script Optimizer</h2>
+        <div id="results"></div>
+        <label>Script input</label>
+        <textarea id="scriptInput" rows="5">Hook: If you sit 8+ hours, your metabolism drops faster than you think.</textarea>
+        <button onclick="optimizeScript()">Optimize Script</button>
+        <pre id="optimizedOutput"></pre>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js"></script>
+  <script>
+    // Parallax background motion
+    window.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      document.querySelectorAll('.parallax').forEach((el) => {
+        const speed = Number(el.dataset.speed || 0.1);
+        el.style.transform = `translate(${x * 30 * speed}px, ${y * 30 * speed}px)`;
+      });
+    });
+
+    // 3D hero object
+    const canvas = document.getElementById('hero3d');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / 360, 0.1, 1000);
+    camera.position.z = 3.2;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setSize(canvas.clientWidth, 360, false);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.9);
+    scene.add(ambient);
+    const point = new THREE.PointLight(0x67e8f9, 1.7);
+    point.position.set(4, 5, 4);
+    scene.add(point);
+
+    const geometry = new THREE.TorusKnotGeometry(0.75, 0.24, 130, 24);
+    const material = new THREE.MeshPhysicalMaterial({
+      color: 0x8b5cf6,
+      metalness: 0.25,
+      roughness: 0.16,
+      transmission: 0.22,
+      thickness: 1,
+      clearcoat: 1,
+      clearcoatRoughness: 0.08,
+    });
+    const knot = new THREE.Mesh(geometry, material);
+    scene.add(knot);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      knot.rotation.x += 0.003;
+      knot.rotation.y += 0.006;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      const w = canvas.clientWidth;
+      renderer.setSize(w, 360, false);
+      camera.aspect = w / 360;
+      camera.updateProjectionMatrix();
+    });
+
+    function demoFill() {
+      document.getElementById('niche').value = 'AI productivity tools';
+      document.getElementById('audience').value = 'Founders and creators';
+      document.getElementById('outcome').value = 'Generate inbound DMs and trial signups';
+      document.getElementById('contentType').value = 'reels';
+      document.getElementById('platform').value = 'instagram';
+      document.getElementById('voice').value = 'Bold, practical, data-driven';
+      document.getElementById('ideaCount').value = 6;
+    }
+
+    async function generateIdeas() {
+      const payload = {
+        niche: document.getElementById('niche').value,
+        audience: document.getElementById('audience').value,
+        desired_outcome: document.getElementById('outcome').value,
+        content_type: document.getElementById('contentType').value,
+        platform: document.getElementById('platform').value,
+        brand_voice: document.getElementById('voice').value,
+        idea_count: Number(document.getElementById('ideaCount').value),
+        use_open_source_llm: document.getElementById('useOssLlm').checked,
+        llm_model: document.getElementById('llmModel').value,
+        llm_temperature: 0.4,
+        constraints: [],
+        meta_tribe_features: {
+          attention_spike: 0.8,
+          emotion_intensity: 0.7,
+          novelty_signal: 0.6
+        }
+      };
+
+      const res = await fetch('/generate-ideas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      const container = document.getElementById('results');
+      container.innerHTML = `<p class="meta">Skills: ${data.selected_skills.join(', ')}</p>`;
+      data.ideas.forEach((idea) => {
+        const div = document.createElement('div');
+        div.className = 'idea';
+        div.innerHTML = `
+          <h3>${idea.title}</h3>
+          <p><strong>Hook:</strong> ${idea.hook}</p>
+          <p><strong>CTA:</strong> ${idea.cta}</p>
+          <p class="meta">Total: ${idea.total_score} • Virality: ${idea.virality_score} • Conversion: ${idea.conversion_score}</p>
+          <pre>${idea.script}</pre>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function optimizeScript() {
+      const payload = {
+        script: document.getElementById('scriptInput').value,
+        desired_outcome: document.getElementById('outcome').value,
+        brand_voice: document.getElementById('voice').value,
+        platform: document.getElementById('platform').value,
+        mirofish_enabled: true
+      };
+
+      const res = await fetch('/optimize-script', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      document.getElementById('optimizedOutput').textContent = `${data.optimized_script}\n\nReport: ${JSON.stringify(data.report, null, 2)}`;
+    }
+  </script>
+</body>
+</html>
