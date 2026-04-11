@@ -21,6 +21,7 @@ Content Cognition is an AI application that generates and optimizes content idea
   - `RetentionScore`
   - `BrandFitScore`
   - `NoveltyScore`
+- Interactive UI now has a dedicated Home page at `/` and a separate Studio page at `/studio` for generation/optimization workflows.
 - Browser UI at `/` for generating ideas and optimizing scripts.
 - Automated API tests with `pytest`.
 

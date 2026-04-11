@@ -41,6 +41,12 @@ def ui() -> FileResponse:
     return FileResponse(static_dir / "index.html")
 
 
+
+
+@app.get("/studio")
+def studio_ui() -> FileResponse:
+    return FileResponse(static_dir / "studio.html")
+
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
