@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Cognition — Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;font-family:Inter,sans-serif;background:radial-gradient(circle at top right,#283c7a 0%,#070b1d 55%);color:#e7edff}
+    .wrap{max-width:1180px;margin:0 auto;padding:20px}
+    .card{background:rgba(16,22,45,.72);border:1px solid rgba(139,165,240,.25);border-radius:18px;backdrop-filter:blur(10px);padding:24px}
+    .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .btn{cursor:pointer;border:1px solid rgba(139,165,240,.25);color:#fff;background:linear-gradient(135deg,rgba(103,232,249,.18),rgba(167,139,250,.2));padding:10px 14px;border-radius:12px;font-weight:600;text-decoration:none}
+    .hero{display:grid;grid-template-columns:1.15fr 1fr;gap:20px;align-items:center}
+    h1{margin:0;line-height:1.05;font-size:clamp(2rem,5vw,3.7rem)}
+    .grad{background:linear-gradient(90deg,#67e8f9,#a78bfa,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+    p{color:#9db0da;line-height:1.6}
+    .grid3{margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .tile{padding:14px;border:1px solid rgba(139,165,240,.25);border-radius:14px;background:rgba(10,14,30,.72)}
+    .tile b{display:block;font-size:1.1rem;margin-bottom:4px}
+    #hero3d{width:100%;height:360px;border-radius:14px;background:rgba(8,12,28,.72);border:1px solid rgba(139,165,240,.25)}
+    @media (max-width:960px){.hero{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div style="font-weight:800">⚡ Content Cognition</div>
+      <a class="btn" href="/studio">Open Creative Studio</a>
+    </div>
+
+    <section class="card hero">
+      <div>
+        <h1>Your actual <span class="grad">Homepage</span> is here.</h1>
+        <p>
+          This is the dedicated landing page. From here, go to the studio to generate ideas,
+          optimize scripts, and run outcome-based content workflows.
+        </p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+          <a class="btn" href="/studio">Enter Studio</a>
+          <a class="btn" href="/docs">API Docs</a>
+        </div>
+        <div class="grid3">
+          <div class="tile"><b>Brain-aware ranking</b>Outcome-conditioned scoring with cognitive features.</div>
+          <div class="tile"><b>OSS LLM support</b>Ollama-compatible generation path.</div>
+          <div class="tile"><b>Training roadmap</b>Tribe V2 + open fMRI expansion plan included.</div>
+        </div>
+      </div>
+      <canvas id="hero3d"></canvas>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js"></script>
+  <script>
+    const canvas = document.getElementById('hero3d');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / 360, 0.1, 1000);
+    camera.position.z = 3.2;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setSize(canvas.clientWidth, 360, false);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+    const p = new THREE.PointLight(0x67e8f9, 1.6); p.position.set(4,5,4); scene.add(p);
+    const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.75, 0.24, 130, 24), new THREE.MeshPhysicalMaterial({ color: 0x8b5cf6, metalness: .25, roughness: .17, clearcoat: 1 }));
+    scene.add(knot);
+    (function anim(){ requestAnimationFrame(anim); knot.rotation.x += .003; knot.rotation.y += .006; renderer.render(scene,camera); })();
+  </script>
+</body>
+</html>

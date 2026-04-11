@@ -1,0 +1,47 @@
+{
+  "version": "2026-04-11",
+  "datasets": [
+    {
+      "name": "StudyForrest",
+      "type": "fMRI naturalistic movie/audio",
+      "url": "https://studyforrest.org/data.html",
+      "content_consumption": ["movie watching", "audio movie listening"],
+      "status": "candidate"
+    },
+    {
+      "name": "OpenNeuro ds003017 (Grand Budapest Hotel)",
+      "type": "fMRI movie watching",
+      "url": "https://openneuro.org/datasets/ds003017",
+      "content_consumption": ["movie watching"],
+      "status": "candidate"
+    },
+    {
+      "name": "OpenNeuro ds004042",
+      "type": "fMRI naturalistic movie + recall",
+      "url": "https://openneuro.org/datasets/ds004042",
+      "content_consumption": ["movie watching", "spoken recall"],
+      "status": "candidate"
+    },
+    {
+      "name": "OpenNeuro ds001132",
+      "type": "fMRI naturalistic movie watching",
+      "url": "https://openneuro.org/datasets/ds001132",
+      "content_consumption": ["movie watching"],
+      "status": "candidate"
+    },
+    {
+      "name": "Algonauts CNeuroMod",
+      "type": "fMRI movie stimuli benchmark",
+      "url": "https://algonautsproject.com/braindata.html",
+      "content_consumption": ["movie watching"],
+      "status": "candidate"
+    },
+    {
+      "name": "Natural Scenes Dataset (NSD)",
+      "type": "fMRI natural image viewing",
+      "url": "https://naturalscenesdataset.org/",
+      "content_consumption": ["image consumption"],
+      "status": "candidate"
+    }
+  ]
+}
